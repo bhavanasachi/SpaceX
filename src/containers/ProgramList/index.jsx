@@ -84,7 +84,7 @@ class ProgramList extends React.Component {
                             <div className="text-center p-1">
                                 <span className="filter-title">Successful Launch</span>
                             </div>
-                            <div className="row">
+                            <div className="container-fluid row m-0">
                                 <button className={"col-5 btn green-pill" + (this.state.launch === "true" ? "-active" : "")} onClick={() => this.handleFilterClick("launch", "true")}>
                                     True
                                 </button>
@@ -95,7 +95,7 @@ class ProgramList extends React.Component {
                             <div className="text-center p-1">
                                 <span className="filter-title">Successful Landing</span>
                             </div>
-                            <div className="row">
+                            <div className="container-fluid row m-0">
                                 <button className={"col-5 btn green-pill" + (this.state.land === "true" ? "-active" : "")} onClick={() => this.handleFilterClick("land", "true")}>
                                     True
                                 </button>
