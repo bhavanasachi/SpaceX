@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchPrograms } from '../../actions/ProgramList';
 import Loader from '../../components/Loader';
+import ProgramListItem from '../../components/ProgramListItem';
+import FilterButton from '../../components/FilterButton';
 
 class ProgramList extends React.Component {
     constructor(props) {
@@ -20,6 +22,7 @@ class ProgramList extends React.Component {
         this.props.fetchPrograms('');
     }
 
+    // applying filters
     handleFilterClick = (type, value) => {
         switch(type) {
             case 'year':
@@ -43,16 +46,19 @@ class ProgramList extends React.Component {
                     };
                 }, this.formatParam);
                 break;
+            default:
+                break;
         }
     }
 
+    // framr query string
     formatParam = () => {
         let param = "";
         if (this.state.year !== null){
             param += "launch_year=" + this.state.year + "&";
         }
         if (this.state.launch !== null){
-            param += "launch_success" + this.state.launch + "&";
+            param += "launch_success=" + this.state.launch + "&";
         }
         if (this.state.land !== null){
             param += "land_success=" + this.state.land + "&";
@@ -75,9 +81,12 @@ class ProgramList extends React.Component {
                             <div className="container-fluid row m-0">
                                 {this.yearList.map((yr) => {
                                     return (
-                                        <button className={"col-5 btn green-pill" + (this.state.year === yr ? "-active" : "")} onClick={() => this.handleFilterClick('year', yr)}>
-                                            {yr}
-                                        </button>
+                                        <FilterButton 
+                                            title={yr} 
+                                            className={"col-5 btn green-pill" + 
+                                                (this.state.year === yr ? "-active" : "")} 
+                                            onClick={() => this.handleFilterClick('year', yr)} 
+                                        />
                                     );
                                 })}
                             </div>
@@ -85,51 +94,49 @@ class ProgramList extends React.Component {
                                 <span className="filter-title">Successful Launch</span>
                             </div>
                             <div className="container-fluid row m-0">
-                                <button className={"col-5 btn green-pill" + (this.state.launch === "true" ? "-active" : "")} onClick={() => this.handleFilterClick("launch", "true")}>
-                                    True
-                                </button>
-                                <button className={"col-5 btn green-pill" + (this.state.launch === "false" ? "-active" : "")}  onClick={() => this.handleFilterClick("launch", "false")}>
-                                    False
-                                </button>
+                                <FilterButton 
+                                    title="True" 
+                                    className={"col-5 btn green-pill" + 
+                                        (this.state.launch === "true" ? "-active" : "")} 
+                                    onClick={() => this.handleFilterClick("launch", "true")} 
+                                />
+                                <FilterButton 
+                                    title="False" 
+                                    className={"col-5 btn green-pill" + 
+                                        (this.state.launch === "false" ? "-active" : "")}  
+                                    onClick={() => this.handleFilterClick("launch", "false")} 
+                                />
                             </div>
                             <div className="text-center p-1">
                                 <span className="filter-title">Successful Landing</span>
                             </div>
                             <div className="container-fluid row m-0">
-                                <button className={"col-5 btn green-pill" + (this.state.land === "true" ? "-active" : "")} onClick={() => this.handleFilterClick("land", "true")}>
-                                    True
-                                </button>
-                                <button className={"col-5 btn green-pill" + (this.state.land === "false" ? "-active" : "")} onClick={() => this.handleFilterClick("land", "false")}>
-                                    False
-                                </button>
+                                <FilterButton 
+                                    title="True" 
+                                    className={"col-5 btn green-pill" + 
+                                        (this.state.land === "true" ? "-active" : "")} 
+                                    onClick={() => this.handleFilterClick("land", "true")} 
+                                />
+                                <FilterButton 
+                                    title="False" 
+                                    className={"col-5 btn green-pill" + 
+                                        (this.state.land === "false" ? "-active" : "")}  
+                                    onClick={() => this.handleFilterClick("land", "false")} 
+                                />
                             </div>
                         </div>
                         <div className="col-md-10 program-list">
                         <div className="row program-list-row">
                             {this.props.loading ? <Loader style={{ margin: "auto" }} /> :
                             this.props.programList && (
-                                <Fragment>
-                                    {Object.entries(this.props.programList).map((val, key) => {
+                                    Object.entries(this.props.programList).map((val, key) => {
                                         return (
-                                            <Fragment>
-                                                <div className="col-sm-1 col-md-6 col-lg-3 program-list-item">
-                                                    <img src={this.props.programList[key].links.mission_patch_small} alt={this.props.programList[key].mission_name} />
-                                                    <div>{this.props.programList[key].mission_name} #{this.props.programList[key].flight_number}</div>
-                                                    <div>Mission Ids:
-                                                        <ul>
-                                                            {this.props.programList[key].mission_id.map((mission) => {
-                                                            <li>{mission}</li>
-                                                            })}
-                                                        </ul>
-                                                    </div>
-                                                    <div>Launch Year: {this.props.programList[key].launch_year}</div>
-                                                    <div>Successful Launch: {this.props.programList[key].launch_success? "True" : "False"}</div>
-                                                    <div>Successful Landing: {this.props.programList[key].launch_landing? "True" : "False"}</div>
-                                                </div>
-                                            </Fragment>
+                                            <ProgramListItem 
+                                                className="col-sm-1 col-md-6 col-lg-3 program-list-box"
+                                                data={this.props.programList[key]} 
+                                            />
                                         );
-                                    })}
-                                </Fragment>
+                                    })
                                 )
                             }
                         </div>

@@ -44,14 +44,17 @@ code {
   background-color: lightgreen;
 }
 
-.program-list-row {
-  margin: 0px;
+.program-list-box {
+  padding-left: 15px;
+  padding-right: 0px;
+  padding-bottom: 15px;
 }
 
 .program-list-item {
   background-color: white;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding: 15px;
+}
+
+.program-list-item img {
+  max-width: 220px;
 }
